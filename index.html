@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mensiversary</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="hearts"></div>
+
+<section class="scr on" id="s0"><h1 id="t0"></h1><p class="sub" id="d0"></p>
+<button class="btn" id="pw">&#9211; Turn on the Radio!</button><p class="hint" style="margin-top:14px;color:#f6e7d0">Pakai headphone &amp; nyalakan volume ya</p></section>
+
+<section class="scr" id="s1"><h1>FM &#9825; LOVE</h1><p class="sub">Twist the dial, search for the frequency that speaks to your soul!</p>
+<div class="radio"><div class="top"><div class="grille"></div><div class="dial">
+<div class="fd"><span id="fd">88.0</span> <small>MHz</small></div>
+<div class="scale"><div class="needle" id="nd"></div></div><div class="scale m" id="tk"></div>
+<div class="lbls"><span>88</span><span>93</span><span>98</span><span>103</span><span>108</span></div></div></div>
+<div class="ctl"><button id="bl">&#9664;</button><input type="range" id="sl" min="88" max="108" step="0.05" value="88"><button id="br">&#9654;</button><div id="led"></div></div>
+<div id="screen"></div></div>
+<div class="prog" id="pg"></div><button class="btn" id="nx">Moving on to the Boarding Pass &#9992;</button></section>
+
+<section class="scr" id="sg"><div class="gate" id="gt"><div class="lk">&#128274;</div><h1 style="font-size:20px;margin-top:8px">CHECK-IN</h1>
+<p class="sub" style="margin-bottom:0">Enter the password to begin your boarding</p>
+<input id="gi" type="text" autocomplete="off" placeholder="&bull; &bull; &bull; &bull;"><button class="btn" id="gb">Boarding &#9992;</button><div id="gh"></div></div></section>
+
+<section class="scr" id="s2"><h1>BOARDING PASS</h1><p class="sub">Tap the feature on the ticket, then scan the barcode to board!</p>
+<div class="pass" id="pass"><div class="pm"><div class="hd"><span>LOVE AIRLINES</span><span id="kl"></span></div>
+<div class="rt"><div><small style="font:10px sans-serif;opacity:.5">FROM</small><br><b id="dr"></b></div><span>&#9992;</span><div style="text-align:right"><small style="font:10px sans-serif;opacity:.5">TO</small><br><b id="ke"></b></div></div>
+<div class="info" id="inf"></div>
+<div class="feat"><button data-f="surat">&#9993; Message</button><button data-f="foto">&#128247; Picture</button><button data-f="momen">&#10024; Moments</button></div></div>
+<div class="perf"></div>
+<div class="stub" id="stub"><small style="font:10px sans-serif;letter-spacing:.2em">SCAN HERE</small><div class="bar" id="bar"><div class="laser"></div></div><div id="sts">TAP BARCODE</div><div class="hint">Tap the barcode to scan</div></div></div></section>
+
+<div id="mod"><div class="box"><button class="x" id="cx">&times;</button><div id="mb"></div></div></div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
