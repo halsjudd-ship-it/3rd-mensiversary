@@ -99,32 +99,15 @@ const C = {
   "foto": [
     {
       "src": "media/pic1.jpg",
-      "cap": "Pertama kali kita foto bareng"
+      "cap": "Adek cantik memble mulu, abang dijudesin"
     },
     {
       "src": "media/pic2.jpg",
-      "cap": "Hari yang paling aku suka"
+      "cap": "Serba berantakan, mungkin kita habis melakukan adegan dewasa?"
     },
     {
       "src": "media/pic3.jpg",
-      "cap": "Kamu, lagi tertawa"
-    }
-  ],
-  "momen": [
-    {
-      "tgl": "Bulan 1",
-      "judul": "Awal Cerita",
-      "isi": "Ceritakan momen pertama kalian."
-    },
-    {
-      "tgl": "Bulan 2",
-      "judul": "Makin Dekat",
-      "isi": "Ceritakan momen kedua."
-    },
-    {
-      "tgl": "Bulan 3",
-      "judul": "Hari Ini",
-      "isi": "Dan sampai di sini, bersamamu."
+      "cap": "Toddler habis beli mainan baru. Gemes, ya?"
     }
   ],
   "akhir": "Access granted. Selamat datang di perjalanan panjang kita. Aku sayang kamu, hari ini dan seterusnya."
