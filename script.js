@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p style="line-height:1.8; font-style:italic; text-align:center;">${C.akhir}</p>
                 <div style="text-align:center; margin-top:20px;">
                     <p style="font-size:14px; margin-bottom:10px;">Aku punya satu kejutan lagi di TikTok...</p>
-                    <a href="https://www.tiktok.com/@username_kamu" target="_blank" class="tiktok-btn" onclick="setTimeout(()=>{document.getElementById('mod').classList.remove('on');show(3);}, 500)">
+                    <a href="https://www.tiktok.com/@khalilyaze" target="_blank" class="tiktok-btn" onclick="setTimeout(()=>{document.getElementById('mod').classList.remove('on');show(3);}, 500)">
                         Buka TikTok & Lihat Kejutan
                     </a>
                 </div>
