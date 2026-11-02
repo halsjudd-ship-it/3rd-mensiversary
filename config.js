@@ -1,11 +1,7 @@
-/* ===== EDIT FILE INI: semua isi website ada di sini =====
-   - stations: freq 88.0-108.0 | type: "song" | "message" | "letter"
-   - audio/foto: taruh file di folder media/, lalu tulis nama file-nya di sini
-   - password: huruf besar/kecil, spasi, dan tanda baca diabaikan
-   - musik_pass: kalau file belum ada, otomatis pakai musik ambient bawaan */
+/* ===== EDIT FILE INI: semua isi website ada di sini ===== */
 const C = {
   "dia": "Kaia",
-  "aku": "Happy",
+  "aku": "Judd",
   "judul": "3rd Mensiversary",
   "password": "261103",
   "hint": "Hint: TODAY (YYMMDD)",
@@ -29,8 +25,7 @@ const C = {
         "These past three months have been the happiest months of my life.",
         "We've had a few arguments here and there, but at the end of the day,",
         "we always find our way back to each other. We're literally",
-        "soulmates at this point, aren't we?"
-
+        "soulmates at this point, aren't we?",
         "Thank you for being so patient with me and all my quirks.",
         "Thank you for staying loyal and being by my side through",
         "the happy and sad times, the ups and the downs."
@@ -73,27 +68,15 @@ const C = {
   "surat": [
     {
       "judul": "Letter #1: When You're Sad",
-      "isi": "If today feels heavy, you don't have to pretend",
-      "to be strong in front of me. You can cry, you can stay quiet,",
-      "you can be mad. I'm not gonna rush you to feel better.",
-      "I just want you to know that I'm here. You're not alone,",
-      "and you will never be a burden to me. Take a deep breath, ya, sayang?"
+      "isi": "If today feels heavy, you don't have to pretend to be strong in front of me. You can cry, you can stay quiet, you can be mad. I'm not gonna rush you to feel better. I just want you to know that I'm here. You're not alone, and you will never be a burden to me. Take a deep breath, ya, sayang?"
     },
     {
       "judul": "Letter #2: When You Miss Me",
-      "isi": "Missing me is normal, and you don't have to be shy",
-      "about admitting it. I miss you too, you know.",
-      "I miss everything about you. So whenever you miss me,",
-      "just remember that I miss you even more."
+      "isi": "Missing me is normal, and you don't have to be shy about admitting it. I miss you too, you know. I miss everything about you. So whenever you miss me, just remember that I miss you even more."
     },
     {
       "judul": "Letter #3: Things I'm Grateful For",
-      "isi": "I'm so grateful I got to know you.",
-      "Not just because you're kind or sweet,",
-      "but because you make me feel enough.",
-      "You accept every side of me, even the ugly ones.",
-      "You're patient, you care, and you always choose to stay.",
-      "Thank you for being my home. I love you, Kaia. Always. 🤍"
+      "isi": "I'm so grateful I got to know you. Not just because you're kind or sweet, but because you make me feel enough. You accept every side of me, even the ugly ones. You're patient, you care, and you always choose to stay. Thank you for being my home. I love you, Kaia. Always. 🤍"
     }
   ],
   "foto": [
@@ -108,6 +91,18 @@ const C = {
     {
       "src": "media/pic3.jpg",
       "cap": "Toddler habis beli mainan baru. Gemes, ya?"
+    }
+  ],
+  "momen": [
+    {
+      "tgl": "Day 1",
+      "judul": "Pertama Kali Jadian",
+      "isi": "Momen di mana semuanya dimulai. Aku masih ingat jelas bagaimana rasanya."
+    },
+    {
+      "tgl": "Day 30",
+      "judul": "First Month",
+      "isi": "Bulan pertama yang penuh dengan adaptasi dan tawa."
     }
   ],
   "akhir": "Access granted. Selamat datang di perjalanan panjang kita. Aku sayang kamu, hari ini dan seterusnya."
