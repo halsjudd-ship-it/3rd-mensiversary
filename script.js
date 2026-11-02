@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
             
             await sleep(2200);
             
-            // TOMBOL TIKTOK
             open(`
                 <h2 style="text-align:center; color:#b8325a;">&#9992; Boarding Complete</h2>
                 <p style="line-height:1.8; font-style:italic; text-align:center;">${C.akhir}</p>
@@ -130,15 +129,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ====== AUDIO & MP3 "PERFECT" ======
+// ====== AUDIO & LOVELY MUSIC BOX ======
 let ac, filt, ng, song = new Audio();
-let bgm = new Audio('media/perfect.mp3'); // <-- INI FILE MP3 KAMU
-bgm.loop = true;
-bgm.volume = 0.5;
 
 function initAudio() {
     try {
         ac = new (window.AudioContext || window.webkitAudioContext)();
+        // Suara desis radio
         const b = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate), d = b.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
         const n = ac.createBufferSource();
@@ -173,23 +170,67 @@ function beep(f, t, d = .15) {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// FUNGSI MEMUTAR MP3
+// ====== MELODI KOTAK MUSIK (LOVELY) ======
+let bgmPlaying = false;
+// Nada-nada ceria, hangat, dan romantis (seperti lagu pengantar tidur)
+const lovelyMelody = [
+    [523.25, 0.5], [659.25, 0.5], [783.99, 0.5], [1046.50, 1.0], [0, 0.5], // C5 E5 G5 C6
+    [880.00, 0.5], [783.99, 0.5], [659.25, 0.5], [783.99, 1.0], [0, 0.5], // A5 G5 E5 G5
+    [698.46, 0.5], [880.00, 0.5], [1046.50, 0.5], [1318.51, 1.0], [0, 0.5], // F5 A5 C6 E6
+    [1174.66, 0.5], [1046.50, 0.5], [880.00, 0.5], [1046.50, 1.5] // D6 C6 A5 C6
+];
+
+function playLovelyMusicBox(index = 0) {
+    if (!bgmPlaying) return;
+    if (index >= lovelyMelody.length) index = 0; // Loop
+
+    const [freq, duration] = lovelyMelody[index];
+
+    if (freq > 0 && ac) {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        
+        // Tipe 'sine' menghasilkan suara paling murni (seperti kotak musik)
+        osc.type = 'sine'; 
+        osc.frequency.value = freq;
+
+        const now = ac.currentTime;
+        
+        // Envelope khusus "Music Box" (bunyi 'ting' yang memudar cepat)
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.4, now + 0.02); // Serangan sangat cepat
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration + 0.5); // Memudar perlahan
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+
+        osc.start(now);
+        osc.stop(now + duration + 0.6);
+    }
+
+    // Jadwalkan nada berikutnya
+    setTimeout(() => playLovelyMusicBox(index + 1), duration * 1000);
+}
+
 function startBgm() {
-    bgm.play().catch((e) => {
-        console.log("Autoplay diblokir browser. Menunggu interaksi user.");
-    });
+    if (!ac) initAudio();
+    if (!bgmPlaying) {
+        bgmPlaying = true;
+        setTimeout(() => playLovelyMusicBox(0), 1000); // Mulai setelah 1 detik
+    }
 }
 
 function toggleMusic() {
     const btn = $('music-toggle');
-    if (bgm.paused) {
-        bgm.play().catch(e => console.log(e));
-        btn.textContent = '🎵';
-        btn.classList.remove('paused');
-    } else {
-        bgm.pause();
+    if (bgmPlaying) {
+        bgmPlaying = false;
         btn.textContent = '🔇';
         btn.classList.add('paused');
+    } else {
+        bgmPlaying = true;
+        btn.textContent = '🎵';
+        btn.classList.remove('paused');
+        playLovelyMusicBox(0); // Lanjut main dari awal
     }
 }
 
