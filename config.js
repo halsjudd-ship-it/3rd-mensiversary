@@ -96,12 +96,21 @@ const C = {
     {
       "tgl": "Day 1",
       "judul": "Pertama Kali Jadian",
-      "isi": "Momen di mana semuanya dimulai. Aku masih ingat jelas bagaimana rasanya."
+      "isi": "Kadang, aku masih suka bacain chat waktu aku mau ngajak kamu pacaran.",
+      "Awalnya aku banyak ragunya, karena aku di situ lagi ke makan jealous.",
+      "Beberapa kali ngurungin niat, karena aku pikir ada yang 'lebih' baik dari aku,",
+      "ditambah kamu lagi seneng-senengnya punya banyak temen, jadi aku selalu mikir kalau",
+      "I'm not the only one who wants you and I don't want you to feel like I'm forcing you",
+      "to be with me. Tapi aku akhirnya memberanikan diri, aku kaget ternyata we have",
+      "same feelings for each other. Ah, gila rasanya aku. Ibarat aku nemuin hidden treasure."
     },
     {
-      "tgl": "Day 30",
-      "judul": "First Month",
-      "isi": "Bulan pertama yang penuh dengan adaptasi dan tawa."
+      "tgl": "Day 91",
+      "judul": "Our Third Month Together",
+      "isi": "Gak kerasa kita udah 3 bulan bareng, Adek. Rasanya baru kemarin kita pacaran,",
+      "tapi sekarang kita udah banyak banget pengalaman bareng, contohnya BERANTEM. Aku bersyukur",
+      "bisa punya kamu di hidup aku. Kamu bikin aku stress tiap hari, bahagia tiap hari, sebel tiap hari.",
+      "Aku janji bakal terus berusaha buat bikin kamu bahagia juga. Aku sayang kamu, hari ini dan seterusnya."
     }
   ],
   "akhir": "Access granted. Selamat datang di perjalanan panjang kita. Aku sayang kamu, hari ini dan seterusnya."
