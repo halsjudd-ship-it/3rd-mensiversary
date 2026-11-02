@@ -141,27 +141,26 @@ function startGarden() {
     
     const emojis = ['🌸', '🌺', '🌷', '🌻', '🌹', '🌼'];
     
-    for(let i = 0; i < 30; i++) {
+    for(let i = 0; i < 40; i++) {
         setTimeout(() => {
             const flower = document.createElement('div');
             flower.className = 'flower';
             const leftPos = Math.random() * 100;
             flower.style.left = leftPos + '%';
-            flower.style.animationDelay = '0s';
+            
+            // Acak ukuran sedikit agar natural
+            const scale = 0.6 + Math.random() * 0.6;
+            flower.style.transform = `scale(${scale})`;
             
             const petal = document.createElement('div');
             petal.className = 'flower-petal';
             petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             
-            const scale = 0.6 + Math.random() * 0.8;
-            petal.style.transform = `translateX(-50%) scale(${scale})`;
-            
             flower.appendChild(petal);
             container.appendChild(flower);
-        }, i * 150);
+        }, i * 150); // Muncul bergantian
     }
 }
-
 // ====== AUDIO FUNCTIONS ======
 let ac, filt, ng, song = new Audio();
 

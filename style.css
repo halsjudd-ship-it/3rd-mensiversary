@@ -107,6 +107,7 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     justify-content: flex-end;
     padding-bottom: 10vh;
 }
+
 #garden-container {
     position: absolute;
     bottom: 0;
@@ -116,56 +117,78 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
     pointer-events: none;
     z-index: 0;
 }
+
 .garden-text {
     position: relative;
     z-index: 10;
     text-align: center;
     animation: fi 2s ease 3s both;
 }
+
+/* Container Bunga */
 .flower {
     position: absolute;
-    bottom: -50px;
+    bottom: -20px;
     width: 40px;
-    height: 40px;
-    animation: bloomUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transform-origin: bottom center;
+    /* Animasi tumbuh dari bawah */
+    animation: growPlant 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
 }
+
+/* Kelopak Bunga (Emoji) */
+.flower-petal {
+    font-size: 35px;
+    opacity: 0;
+    transform: scale(0);
+    /* Animasi mekar (muncul setelah batang tumbuh) */
+    animation: bloomPetal 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: inherit; /* Mewarisi delay dari JS */
+    position: relative;
+    z-index: 2;
+}
+
+/* Batang Bunga */
 .flower::before {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
     width: 4px;
     height: 0;
     background: #4a7c59;
-    transform: translateX(-50%);
+    border-radius: 4px;
+    z-index: 1;
+    /* Animasi batang memanjang */
     animation: growStem 2s ease forwards;
     animation-delay: inherit;
 }
-.flower-petal {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    font-size: 30px;
-    animation: bloomPetal 2s ease forwards;
-    animation-delay: inherit;
-}
-@keyframes growStem { to { height: 120px; } }
-@keyframes bloomPetal {
-    0% { transform: translateX(-50%) scale(0) rotate(-30deg); opacity: 0; }
-    60% { transform: translateX(-50%) scale(1.2) rotate(10deg); opacity: 1; }
-    100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
-}
-@keyframes bloomUp {
-    0% { opacity: 0; transform: translateY(50px); }
-    20% { opacity: 1; }
-    100% { opacity: 1; transform: translateY(0); }
+
+/* KEYFRAMES ANIMASI */
+
+/* 1. Batang memanjang ke atas */
+@keyframes growStem {
+    0% { height: 0; }
+    100% { height: 100px; }
 }
 
-@media(max-width:620px){.pass{flex-direction:column}.pm{border-radius:18px 18px 0 0}.pm:before{border-radius:18px 18px 0 0}.perf{border-left:0;border-top:3px dashed #b8a98f;height:0;width:auto}.perf:before{left:-12px;top:-13px}.perf:after{left:auto;right:-12px;top:-13px;bottom:auto}.stub{width:auto;border-radius:0 0 18px 18px;transform-origin:100% 0}.stub.tear{transform:translate(60px,320px) rotate(14deg)}.info{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column}.grille{display:none}}
-.gate{width:min(92vw,420px);background:linear-gradient(145deg,#2b1a2e,#1a0f1d);border:2px solid #b8325a;border-radius:18px;padding:28px;text-align:center;box-shadow:0 0 40px #b8325a50,0 20px 50px #000a}
-.gate .lk{font-size:46px;animation:bob 1.8s infinite}.gate input{width:100%;margin:16px 0 10px;padding:14px;border-radius:30px;border:2px solid #8a6a3a;background:#120a14;color:#ffd699;font:20px monospace;text-align:center;letter-spacing:.3em;outline:0}
-.gate input:focus{border-color:#ffb347;box-shadow:0 0 14px #ffb34760}.gate.bad{animation:shk .45s}@keyframes shk{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
-#gh{min-height:22px;margin-top:12px;font:13px sans-serif;color:#ff8fa8}
+/* 2. Kelopak mekar di ujung batang */
+@keyframes bloomPetal {
+    0% { 
+        transform: scale(0) translateY(0); 
+        opacity: 0; 
+    }
+    100% { 
+        transform: scale(1) translateY(-100px); /* Naik ke ujung batang */
+        opacity: 1; 
+    }
+}
+
+/* 3. Container muncul */
+@keyframes growPlant {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    100% { opacity: 1; }
+}
