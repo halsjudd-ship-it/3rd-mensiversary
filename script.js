@@ -7,12 +7,10 @@ const show = n => {
     if($('s' + n)) $('s' + n).classList.add('on');
 };
 
-// Set Teks Awal
 document.addEventListener("DOMContentLoaded", () => {
     if($('t0')) $('t0').textContent = C.judul.toUpperCase();
     if($('d0')) $('d0').textContent = C.tanggal + ' \u2022 untuk ' + C.dia;
 
-    // Tombol Radio Pertama
     if($('pw')) {
         $('pw').addEventListener('click', () => {
             initAudio();
@@ -22,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Setup Hati
     setInterval(() => {
         if(!$('hearts')) return;
         const h = document.createElement('i');
@@ -32,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => h.remove(), 12000);
     }, 600);
     
-    // Setup Radio Ticks
     if($('tk')) {
         C.stations.forEach(s => {
             const t = document.createElement('div');
@@ -42,11 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Setup Password
     if($('gb')) $('gb').onclick = check;
     if($('gi')) $('gi').onkeydown = e => { if (e.key === 'Enter') check(); };
     
-    // Setup Barcode
     let sd = 7;
     const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
     if($('bar')) {
@@ -58,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    // Tombol Lanjut ke Boarding Pass
     if($('nx')) {
         $('nx').onclick = () => {
             if(song) song.pause();
@@ -68,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Tombol Fitur Boarding Pass
     document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => {
         if (ac) beep(520, ac.currentTime, .08);
         const f = b.dataset.f;
@@ -85,11 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
         `);
     });
 
-    // Setup Modal Close
     if($('cx')) $('cx').onclick = () => { if($('mod')) $('mod').classList.remove('on'); };
     if($('mod')) $('mod').onclick = e => { if (e.target.id === 'mod') $('mod').classList.remove('on'); };
 
-    // Setup Barcode Scan
     if($('bar')) {
         $('bar').onclick = async () => {
             if (window.busy) return;
@@ -123,10 +113,54 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             await sleep(2200);
-            open(`<h2>&#9992; Boarding Complete</h2><p style="line-height:1.8;font-style:italic">${C.akhir}</p><p style="margin-top:14px;text-align:right">- ${C.aku}</p>`);
+            
+            // MODAL PENUTUP & TOMBOL TIKTOK
+            open(`
+                <h2 style="text-align:center; color:#b8325a;">&#9992; Boarding Complete</h2>
+                <p style="line-height:1.8; font-style:italic; text-align:center;">${C.akhir}</p>
+                
+                <div style="text-align:center; margin-top:20px;">
+                    <p style="font-size:14px; margin-bottom:10px;">Aku punya satu kejutan lagi di TikTok...</p>
+                    <a href="https://www.tiktok.com/@khalilyaze" target="_blank" class="tiktok-btn" onclick="startGarden()">
+                        Buka TikTok & Lihat Kejutan
+                    </a>
+                </div>
+                <p style="margin-top:14px;text-align:right; font-style:italic;">- ${C.aku}</p>
+            `);
         };
     }
 });
+
+// ====== FUNGSI BUNGA ======
+function startGarden() {
+    if($('mod')) $('mod').classList.remove('on');
+    show(3);
+    
+    const container = $('garden-container');
+    if(!container) return;
+    
+    const emojis = ['🌸', '🌺', '🌷', '🌻', '🌹', '🌼'];
+    
+    for(let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            const leftPos = Math.random() * 100;
+            flower.style.left = leftPos + '%';
+            flower.style.animationDelay = '0s';
+            
+            const petal = document.createElement('div');
+            petal.className = 'flower-petal';
+            petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const scale = 0.6 + Math.random() * 0.8;
+            petal.style.transform = `translateX(-50%) scale(${scale})`;
+            
+            flower.appendChild(petal);
+            container.appendChild(flower);
+        }, i * 150);
+    }
+}
 
 // ====== AUDIO FUNCTIONS ======
 let ac, filt, ng, song = new Audio();

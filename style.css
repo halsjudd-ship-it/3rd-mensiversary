@@ -78,7 +78,92 @@ input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;bac
 .ph img{width:100%;display:block;min-height:140px;background:linear-gradient(135deg,#e8708a,#f7c59f)}.ph p{text-align:center;padding:8px;font-style:italic}
 .tl{border-left:3px solid #b8325a;padding-left:16px}.tl div{margin-bottom:16px}.tl small{color:#b8325a;font-weight:700}
 
-/* GATE & MOBILE */
+/* TIKTOK BUTTON */
+.tiktok-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: 0.3s;
+    border: 2px solid #ff0050;
+    box-shadow: 0 4px 15px rgba(255, 0, 80, 0.4);
+}
+.tiktok-btn:hover {
+    background: #ff0050;
+    transform: scale(1.05);
+}
+
+/* GARDEN & FLOWERS */
+#s3 {
+    background: linear-gradient(to bottom, #0d0710, #1a0f1d);
+    overflow: hidden;
+    position: relative;
+    justify-content: flex-end;
+    padding-bottom: 10vh;
+}
+#garden-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.garden-text {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    animation: fi 2s ease 3s both;
+}
+.flower {
+    position: absolute;
+    bottom: -50px;
+    width: 40px;
+    height: 40px;
+    animation: bloomUp 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+    transform-origin: bottom center;
+}
+.flower::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    height: 0;
+    background: #4a7c59;
+    transform: translateX(-50%);
+    animation: growStem 2s ease forwards;
+    animation-delay: inherit;
+}
+.flower-petal {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    font-size: 30px;
+    animation: bloomPetal 2s ease forwards;
+    animation-delay: inherit;
+}
+@keyframes growStem { to { height: 120px; } }
+@keyframes bloomPetal {
+    0% { transform: translateX(-50%) scale(0) rotate(-30deg); opacity: 0; }
+    60% { transform: translateX(-50%) scale(1.2) rotate(10deg); opacity: 1; }
+    100% { transform: translateX(-50%) scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes bloomUp {
+    0% { opacity: 0; transform: translateY(50px); }
+    20% { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 @media(max-width:620px){.pass{flex-direction:column}.pm{border-radius:18px 18px 0 0}.pm:before{border-radius:18px 18px 0 0}.perf{border-left:0;border-top:3px dashed #b8a98f;height:0;width:auto}.perf:before{left:-12px;top:-13px}.perf:after{left:auto;right:-12px;top:-13px;bottom:auto}.stub{width:auto;border-radius:0 0 18px 18px;transform-origin:100% 0}.stub.tear{transform:translate(60px,320px) rotate(14deg)}.info{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column}.grille{display:none}}
 .gate{width:min(92vw,420px);background:linear-gradient(145deg,#2b1a2e,#1a0f1d);border:2px solid #b8325a;border-radius:18px;padding:28px;text-align:center;box-shadow:0 0 40px #b8325a50,0 20px 50px #000a}
 .gate .lk{font-size:46px;animation:bob 1.8s infinite}.gate input{width:100%;margin:16px 0 10px;padding:14px;border-radius:30px;border:2px solid #8a6a3a;background:#120a14;color:#ffd699;font:20px monospace;text-align:center;letter-spacing:.3em;outline:0}
