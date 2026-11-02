@@ -1,26 +1,134 @@
+console.log("Website berhasil dimuat!");
+
 const $ = id => document.getElementById(id);
 
-// 1. Tampilkan Teks Awal
-if($('t0')) $('t0').textContent = C.judul.toUpperCase();
-if($('d0')) $('d0').textContent = C.tanggal + ' \u2022 untuk ' + C.dia;
-
-// 2. Fungsi Pindah Halaman
 const show = n => {
     document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
     if($('s' + n)) $('s' + n).classList.add('on');
 };
 
-// 3. Efek Hati
-setInterval(() => {
-    if(!$('hearts')) return;
-    const h = document.createElement('i');
-    h.textContent = ['\u2665', '\u2764', '\u2727'][Math.random() * 3 | 0];
-    h.style.cssText = `left:${Math.random() * 100}vw; font-size:${10 + Math.random() * 22}px; color:#e8708a; animation-duration:${6 + Math.random() * 6}s`;
-    $('hearts').appendChild(h);
-    setTimeout(() => h.remove(), 12000);
-}, 600);
+// Set Teks Awal
+document.addEventListener("DOMContentLoaded", () => {
+    if($('t0')) $('t0').textContent = C.judul.toUpperCase();
+    if($('d0')) $('d0').textContent = C.tanggal + ' \u2022 untuk ' + C.dia;
 
-// 4. Audio Setup
+    // Tombol Radio Pertama
+    if($('pw')) {
+        $('pw').addEventListener('click', () => {
+            initAudio();
+            show(1);
+            if($('led')) $('led').classList.add('on');
+            tune(88);
+        });
+    }
+
+    // Setup Hati
+    setInterval(() => {
+        if(!$('hearts')) return;
+        const h = document.createElement('i');
+        h.textContent = ['\u2665', '\u2764', '\u2727'][Math.random() * 3 | 0];
+        h.style.cssText = `left:${Math.random() * 100}vw; font-size:${10 + Math.random() * 22}px; color:#e8708a; animation-duration:${6 + Math.random() * 6}s`;
+        $('hearts').appendChild(h);
+        setTimeout(() => h.remove(), 12000);
+    }, 600);
+    
+    // Setup Radio Ticks
+    if($('tk')) {
+        C.stations.forEach(s => {
+            const t = document.createElement('div');
+            t.className = 'tick';
+            t.style.left = ((s.freq - 88) / 20 * 100) + '%';
+            $('tk').appendChild(t);
+        });
+    }
+
+    // Setup Password
+    if($('gb')) $('gb').onclick = check;
+    if($('gi')) $('gi').onkeydown = e => { if (e.key === 'Enter') check(); };
+    
+    // Setup Barcode
+    let sd = 7;
+    const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+    if($('bar')) {
+        for (let i = 0; i < 46; i++) {
+            const e = document.createElement('i');
+            e.style.width = (1 + (rnd() * 4 | 0)) + 'px';
+            e.style.marginRight = (1 + (rnd() * 3 | 0)) + 'px';
+            $('bar').appendChild(e);
+        }
+    }
+    
+    // Tombol Lanjut ke Boarding Pass
+    if($('nx')) {
+        $('nx').onclick = () => {
+            if(song) song.pause();
+            if (ng) ng.gain.value = 0;
+            show('g');
+            if($('gi')) $('gi').focus();
+        };
+    }
+
+    // Tombol Fitur Boarding Pass
+    document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => {
+        if (ac) beep(520, ac.currentTime, .08);
+        const f = b.dataset.f;
+        
+        if (f === 'surat' && C.surat) open('<h2>Surat-suratku</h2>' + C.surat.map(s => `<div class="lt" onclick="this.classList.toggle('o')"><b>${s.judul}</b><div>${s.isi}</div></div>`).join(''));
+        if (f === 'foto' && C.foto) open('<h2>Galeri Kita</h2>' + C.foto.map(p => `<div class="ph"><img src="${p.src}" alt=""><p>${p.cap}</p></div>`).join(''));
+        if (f === 'momen' && C.momen) open('<h2>Momen Kita</h2><div class="tl">' + C.momen.map(m => `<div><small>${m.tgl}</small><br><b>${m.judul}</b><br>${m.isi}</div>`).join('') + '</div>');
+        if (f === 'kita') open(`
+            <h2 style="text-align:center; margin-bottom:20px;">Chibi Kita 🥰</h2>
+            <div style="background:#fff; padding:15px 15px 40px; box-shadow:0 10px 20px rgba(0,0,0,0.1); transform:rotate(-2deg); max-width:300px; margin:0 auto;">
+                <img src="media/chibi.jpg" style="width:100%; border-radius:5px; display:block;">
+                <p style="text-align:center; font-family:'Georgia', serif; font-style:italic; font-size:15px; color:#b8325a; margin-top:15px; transform:rotate(1deg);">"Gemes banget, ya? Sama kayak kita."</p>
+            </div>
+        `);
+    });
+
+    // Setup Modal Close
+    if($('cx')) $('cx').onclick = () => { if($('mod')) $('mod').classList.remove('on'); };
+    if($('mod')) $('mod').onclick = e => { if (e.target.id === 'mod') $('mod').classList.remove('on'); };
+
+    // Setup Barcode Scan
+    if($('bar')) {
+        $('bar').onclick = async () => {
+            if (window.busy) return;
+            window.busy = true;
+            const bar = $('bar'), st = $('sts');
+            bar.classList.add('scan');
+            if(st) st.textContent = 'SCANNING...';
+            
+            for (let i = 0; i < 6; i++) {
+                if (ac) beep(900 + i * 60, ac.currentTime, .07);
+                await sleep(350);
+            }
+            
+            bar.classList.remove('scan');
+            if(st) st.innerHTML = '<span class="ok">&#10003; ACCESS GRANTED</span>';
+            if (ac) { beep(880, ac.currentTime, .2); beep(1320, ac.currentTime + .18, .4); }
+            
+            await sleep(900);
+            if($('pass')) $('pass').classList.add('rip');
+            rip();
+            if($('stub')) $('stub').classList.add('tear');
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    if(!$('hearts')) return;
+                    const h = document.createElement('i');
+                    h.textContent = '\u2764';
+                    h.style.cssText = `left:${20 + Math.random() * 60}vw; font-size:${16 + Math.random() * 26}px; color:#ff6b8f; animation-duration:${3 + Math.random() * 3}s`;
+                    $('hearts').appendChild(h);
+                }, i * 80);
+            }
+            
+            await sleep(2200);
+            open(`<h2>&#9992; Boarding Complete</h2><p style="line-height:1.8;font-style:italic">${C.akhir}</p><p style="margin-top:14px;text-align:right">- ${C.aku}</p>`);
+        };
+    }
+});
+
+// ====== AUDIO FUNCTIONS ======
 let ac, filt, ng, song = new Audio();
 
 function initAudio() {
@@ -41,9 +149,7 @@ function initAudio() {
         filt.connect(ng);
         ng.connect(ac.destination);
         n.start();
-    } catch(e) {
-        console.log("Audio error:", e);
-    }
+    } catch(e) { console.log("Audio error:", e); }
 }
 
 function beep(f, t, d = .15) {
@@ -60,18 +166,11 @@ function beep(f, t, d = .15) {
     } catch(e) {}
 }
 
-// 5. Logika Radio
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ====== RADIO FUNCTIONS ======
 const seen = new Set();
 let cur = null, typing = 0;
-
-if($('pw')) {
-    $('pw').onclick = () => {
-        initAudio();
-        show(1);
-        if($('led')) $('led').classList.add('on');
-        tune(88);
-    };
-}
 
 function clearScr(html) {
     if($('screen')) $('screen').innerHTML = html || '<div class="static">~ krrzzzt ~ ssshhh ~ kzzt ~</div>';
@@ -109,8 +208,6 @@ function tune(v) {
 if($('sl')) $('sl').oninput = e => tune(e.target.value);
 if($('bl')) $('bl').onclick = () => tune(Math.max(88, +$('sl').value - .1));
 if($('br')) $('br').onclick = () => tune(Math.min(108, +$('sl').value + .1));
-
-const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function play(s) {
     const my = ++typing;
@@ -156,16 +253,7 @@ async function play(s) {
     }
 }
 
-if($('nx')) {
-    $('nx').onclick = () => {
-        song.pause();
-        if (ng) ng.gain.value = 0;
-        show('g');
-        if($('gi')) $('gi').focus();
-    };
-}
-
-// 6. Password
+// ====== PASSWORD & BOARDING ======
 const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 
 function check() {
@@ -187,12 +275,22 @@ function check() {
     }
 }
 
-if($('gb')) $('gb').onclick = check;
-if($('gi')) $('gi').onkeydown = e => { if (e.key === 'Enter') check(); };
+const P = C.pass;
+if($('kl')) $('kl').textContent = P.kelas;
+if($('dr')) $('dr').textContent = P.dari;
+if($('ke')) $('ke').textContent = P.ke;
+if($('inf')) {
+    $('inf').innerHTML = [['PENUMPANG', C.dia], ['FLIGHT', P.flight], ['GATE', P.gate], ['SEAT', P.seat]]
+        .map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');
+}
 
-// 7. Background Music
+// ====== MODAL & MUSIC ======
+const open = h => {
+    if($('mb')) $('mb').innerHTML = h;
+    if($('mod')) $('mod').classList.add('on');
+};
+
 let bgm, bgmOn = false;
-
 function synth() {
     if (bgmOn || !ac) return;
     bgmOn = true;
@@ -226,97 +324,6 @@ function startBgm() {
     bgm.volume = .5;
     bgm.addEventListener('error', synth);
     bgm.play().catch(synth);
-}
-
-// 8. Boarding Pass Data
-const P = C.pass;
-if($('kl')) $('kl').textContent = P.kelas;
-if($('dr')) $('dr').textContent = P.dari;
-if($('ke')) $('ke').textContent = P.ke;
-if($('inf')) {
-    $('inf').innerHTML = [['PENUMPANG', C.dia], ['FLIGHT', P.flight], ['GATE', P.gate], ['SEAT', P.seat]]
-        .map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');
-}
-
-// 9. Barcode
-let sd = 7;
-const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-if($('bar')) {
-    for (let i = 0; i < 46; i++) {
-        const e = document.createElement('i');
-        e.style.width = (1 + (rnd() * 4 | 0)) + 'px';
-        e.style.marginRight = (1 + (rnd() * 3 | 0)) + 'px';
-        $('bar').appendChild(e);
-    }
-}
-
-// 10. Modal & Tombol Fitur
-const open = h => {
-    if($('mb')) $('mb').innerHTML = h;
-    if($('mod')) $('mod').classList.add('on');
-};
-
-if($('cx')) $('cx').onclick = () => { if($('mod')) $('mod').classList.remove('on'); };
-if($('mod')) $('mod').onclick = e => { if (e.target.id === 'mod') $('mod').classList.remove('on'); };
-
-document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => {
-    if (ac) beep(520, ac.currentTime, .08);
-    const f = b.dataset.f;
-    
-    if (f === 'surat' && C.surat) open('<h2>Surat-suratku</h2>' + C.surat.map(s => `<div class="lt" onclick="this.classList.toggle('o')"><b>${s.judul}</b><div>${s.isi}</div></div>`).join(''));
-    
-    if (f === 'foto' && C.foto) open('<h2>Galeri Kita</h2>' + C.foto.map(p => `<div class="ph"><img src="${p.src}" alt="" onerror="this.removeAttribute('src')"><p>${p.cap}</p></div>`).join(''));
-    
-    if (f === 'momen' && C.momen) open('<h2>Momen Kita</h2><div class="tl">' + C.momen.map(m => `<div><small>${m.tgl}</small><br><b>${m.judul}</b><br>${m.isi}</div>`).join('') + '</div>');
-    
-    if (f === 'kita') open(`
-        <h2 style="text-align:center; margin-bottom:20px;">Chibi Kita 🥰</h2>
-        <div style="background:#fff; padding:15px 15px 40px; box-shadow:0 10px 20px rgba(0,0,0,0.1); transform:rotate(-2deg); max-width:300px; margin:0 auto;">
-            <img src="media/chibi.jpg" style="width:100%; border-radius:5px; display:block;">
-            <p style="text-align:center; font-family:'Georgia', serif; font-style:italic; font-size:15px; color:#b8325a; margin-top:15px; transform:rotate(1deg);">
-                "Gemes banget, ya? Sama kayak kita."
-            </p>
-        </div>
-    `);
-});
-
-// 11. Scan Barcode
-let busy = false;
-if($('bar')) {
-    $('bar').onclick = async () => {
-        if (busy) return;
-        busy = true;
-        const bar = $('bar'), st = $('sts');
-        bar.classList.add('scan');
-        if(st) st.textContent = 'SCANNING...';
-        
-        for (let i = 0; i < 6; i++) {
-            if (ac) beep(900 + i * 60, ac.currentTime, .07);
-            await sleep(350);
-        }
-        
-        bar.classList.remove('scan');
-        if(st) st.innerHTML = '<span class="ok">&#10003; ACCESS GRANTED</span>';
-        if (ac) { beep(880, ac.currentTime, .2); beep(1320, ac.currentTime + .18, .4); }
-        
-        await sleep(900);
-        if($('pass')) $('pass').classList.add('rip');
-        rip();
-        if($('stub')) $('stub').classList.add('tear');
-        
-        for (let i = 0; i < 30; i++) {
-            setTimeout(() => {
-                if(!$('hearts')) return;
-                const h = document.createElement('i');
-                h.textContent = '\u2764';
-                h.style.cssText = `left:${20 + Math.random() * 60}vw; font-size:${16 + Math.random() * 26}px; color:#ff6b8f; animation-duration:${3 + Math.random() * 3}s`;
-                $('hearts').appendChild(h);
-            }, i * 80);
-        }
-        
-        await sleep(2200);
-        open(`<h2>&#9992; Boarding Complete</h2><p style="line-height:1.8;font-style:italic">${C.akhir}</p><p style="margin-top:14px;text-align:right">- ${C.aku}</p>`);
-    };
 }
 
 function rip() {
