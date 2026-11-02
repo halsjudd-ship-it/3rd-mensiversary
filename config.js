@@ -98,15 +98,15 @@ const C = {
   ],
   "foto": [
     {
-      "src": "media/foto1.jpg",
+      "src": "media/pic1.jpg",
       "cap": "Pertama kali kita foto bareng"
     },
     {
-      "src": "media/foto2.jpg",
+      "src": "media/pic2.jpg",
       "cap": "Hari yang paling aku suka"
     },
     {
-      "src": "media/foto3.jpg",
+      "src": "media/pic3.jpg",
       "cap": "Kamu, lagi tertawa"
     }
   ],
