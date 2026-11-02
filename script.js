@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p style="line-height:1.8; font-style:italic; text-align:center;">${C.akhir}</p>
                 <div style="text-align:center; margin-top:20px;">
                     <p style="font-size:14px; margin-bottom:10px;">Aku punya satu kejutan lagi di TikTok...</p>
-                    <a href="https://www.tiktok.com/@khalilyaze" target="_blank" class="tiktok-btn" onclick="setTimeout(()=>{document.getElementById('mod').classList.remove('on');show(3);}, 500)">
+                    <a href="https://www.tiktok.com/@username_kamu" target="_blank" class="tiktok-btn" onclick="setTimeout(()=>{document.getElementById('mod').classList.remove('on');show(3);}, 500)">
                         Buka TikTok & Lihat Kejutan
                     </a>
                 </div>
@@ -130,8 +130,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ====== AUDIO & PIANO "PERFECT" ======
+// ====== AUDIO & MP3 "PERFECT" ======
 let ac, filt, ng, song = new Audio();
+let bgm = new Audio('media/perfect.mp3'); // <-- INI FILE MP3 KAMU
+bgm.loop = true;
+bgm.volume = 0.5;
 
 function initAudio() {
     try {
@@ -170,65 +173,23 @@ function beep(f, t, d = .15) {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// Melodi Piano "Perfect"
-let bgmOn = false, bgmPlaying = false;
-const perfectMelody = [
-    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
-    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
-    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
-    [587.33, 0.4], [523.25, 0.4], [493.88, 0.4], [440.00, 1.2], [0, 0.8],
-    [659.25, 0.4], [659.25, 0.4], [587.33, 0.4], [493.88, 0.4],
-    [659.25, 0.4], [659.25, 0.4], [587.33, 0.4], [493.88, 0.4],
-    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 1.2], [0, 1.0]
-];
-
-function playPerfectPiano(index = 0) {
-    if (!bgmPlaying) return;
-    if (index >= perfectMelody.length) index = 0;
-
-    const [freq, duration] = perfectMelody[index];
-
-    if (freq > 0 && ac) {
-        const osc = ac.createOscillator();
-        const gain = ac.createGain();
-        osc.type = 'triangle'; 
-        osc.frequency.value = freq;
-
-        const now = ac.currentTime;
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.3, now + 0.05); 
-        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        osc.connect(gain);
-        gain.connect(ac.destination);
-
-        osc.start(now);
-        osc.stop(now + duration);
-    }
-
-    setTimeout(() => playPerfectPiano(index + 1), duration * 1000);
-}
-
+// FUNGSI MEMUTAR MP3
 function startBgm() {
-    if (!ac) initAudio();
-    if (!bgmOn) {
-        bgmOn = true;
-        bgmPlaying = true;
-        setTimeout(() => playPerfectPiano(0), 1000);
-    }
+    bgm.play().catch((e) => {
+        console.log("Autoplay diblokir browser. Menunggu interaksi user.");
+    });
 }
 
 function toggleMusic() {
     const btn = $('music-toggle');
-    if (bgmPlaying) {
-        bgmPlaying = false;
-        btn.textContent = '🔇';
-        btn.classList.add('paused');
-    } else {
-        bgmPlaying = true;
+    if (bgm.paused) {
+        bgm.play().catch(e => console.log(e));
         btn.textContent = '🎵';
         btn.classList.remove('paused');
-        playPerfectPiano(0); 
+    } else {
+        bgm.pause();
+        btn.textContent = '🔇';
+        btn.classList.add('paused');
     }
 }
 
