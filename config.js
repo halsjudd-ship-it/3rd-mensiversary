@@ -92,17 +92,6 @@ const C = {
       "cap": "Toddler habis beli mainan baru. Gemes, ya?"
     }
   ],
-  "momen": [
-    {
-      "tgl": "Day 1",
-      "judul": "Pertama Kali Jadian",
-      "isi": "Momen di mana semuanya dimulai. Aku masih ingat jelas bagaimana rasanya."
-    },
-    {
-      "tgl": "Day 30",
-      "judul": "First Month",
-      "isi": "Bulan pertama yang penuh dengan adaptasi dan tawa."
-    }
-  ],
+  
   "akhir": "Access granted. Selamat datang di perjalanan panjang kita. Aku sayang kamu, hari ini dan seterusnya."
 };

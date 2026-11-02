@@ -7,7 +7,7 @@ const show = n => {
 $('t0').textContent = C.judul.toUpperCase();
 $('d0').textContent = C.tanggal + ' \u2022 untuk ' + C.dia;
 
-// Efek Hati
+// Efek Hati Berjatuhan
 setInterval(() => {
     const h = document.createElement('i');
     h.textContent = ['\u2665', '\u2764', '\u2727'][Math.random() * 3 | 0];
@@ -16,7 +16,7 @@ setInterval(() => {
     setTimeout(() => h.remove(), 12000);
 }, 600);
 
-// Audio
+// Setup Audio
 let ac, filt, ng, song = new Audio();
 
 function initAudio() {
@@ -50,7 +50,7 @@ function beep(f, t, d = .15) {
     o.stop(t + d);
 }
 
-// Radio
+// Logika Radio
 const seen = new Set();
 let cur = null, typing = 0;
 
@@ -152,7 +152,7 @@ $('nx').onclick = () => {
     $('gi').focus();
 };
 
-// Password
+// Logika Password Gate
 const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 
 function check() {
@@ -173,4 +173,142 @@ function check() {
 }
 
 $('gb').onclick = check;
-$('gi').
+$('gi').onkeydown = e => { if (e.key === 'Enter') check(); };
+
+// Background Music
+let bgm, bgmOn = false;
+
+function synth() {
+    if (bgmOn || !ac) return;
+    bgmOn = true;
+    const ch = [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]];
+    let i = 0;
+    const m = ac.createGain();
+    m.gain.value = .6;
+    m.connect(ac.destination);
+    const go = () => {
+        const t = ac.currentTime;
+        ch[i++ % 4].forEach(f => {
+            const o = ac.createOscillator(), g = ac.createGain();
+            o.type = 'sine';
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(.07, t + 1.5);
+            g.gain.linearRampToValueAtTime(0, t + 4.4);
+            o.connect(g);
+            g.connect(m);
+            o.start(t);
+            o.stop(t + 4.5);
+        });
+    };
+    go();
+    setInterval(go, 4000);
+}
+
+function startBgm() {
+    bgm = new Audio(C.musik_pass);
+    bgm.loop = true;
+    bgm.volume = .5;
+    bgm.addEventListener('error', synth);
+    bgm.play().catch(synth);
+}
+
+// Logika Boarding Pass
+const P = C.pass;
+$('kl').textContent = P.kelas;
+$('dr').textContent = P.dari;
+$('ke').textContent = P.ke;
+$('inf').innerHTML = [['PENUMPANG', C.dia], ['FLIGHT', P.flight], ['GATE', P.gate], ['SEAT', P.seat]]
+    .map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');
+
+// Barcode Generator
+let sd = 7;
+const rnd = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+for (let i = 0; i < 46; i++) {
+    const e = document.createElement('i');
+    e.style.width = (1 + (rnd() * 4 | 0)) + 'px';
+    e.style.marginRight = (1 + (rnd() * 3 | 0)) + 'px';
+    $('bar').appendChild(e);
+}
+
+// Modal & Tombol Fitur
+const open = h => {
+    $('mb').innerHTML = h;
+    $('mod').classList.add('on');
+};
+
+$('cx').onclick = () => $('mod').classList.remove('on');
+$('mod').onclick = e => { if (e.target.id === 'mod') $('mod').classList.remove('on'); };
+
+document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => {
+    if (ac) beep(520, ac.currentTime, .08);
+    const f = b.dataset.f;
+    
+    if (f === 'surat') open('<h2>Surat-suratku</h2>' + C.surat.map(s => `<div class="lt" onclick="this.classList.toggle('o')"><b>${s.judul}</b><div>${s.isi}</div></div>`).join(''));
+    
+    if (f === 'foto') open('<h2>Galeri Kita</h2>' + C.foto.map(p => `<div class="ph"><img src="${p.src}" alt="" onerror="this.removeAttribute('src')"><p>${p.cap}</p></div>`).join(''));
+    
+    if (f === 'momen') open('<h2>Momen Kita</h2><div class="tl">' + C.momen.map(m => `<div><small>${m.tgl}</small><br><b>${m.judul}</b><br>${m.isi}</div>`).join('') + '</div>');
+    
+    // Fitur Chibi
+    if (f === 'kita') open(`
+        <h2 style="text-align:center; margin-bottom:20px;">Chibi Kita 🥰</h2>
+        <div style="background:#fff; padding:15px 15px 40px; box-shadow:0 10px 20px rgba(0,0,0,0.1); transform:rotate(-2deg); max-width:300px; margin:0 auto;">
+            <img src="media/chibi.jpg" style="width:100%; border-radius:5px; display:block;">
+            <p style="text-align:center; font-family:'Georgia', serif; font-style:italic; font-size:15px; color:#b8325a; margin-top:15px; transform:rotate(1deg);">
+                "Gemes banget, ya? Sama kayak kita."
+            </p>
+        </div>
+    `);
+});
+
+// Logika Scan Barcode & Robek Tiket
+let busy = false;
+$('bar').onclick = async () => {
+    if (busy) return;
+    busy = true;
+    const bar = $('bar'), st = $('sts');
+    bar.classList.add('scan');
+    st.textContent = 'SCANNING...';
+    
+    for (let i = 0; i < 6; i++) {
+        if (ac) beep(900 + i * 60, ac.currentTime, .07);
+        await sleep(350);
+    }
+    
+    bar.classList.remove('scan');
+    st.innerHTML = '<span class="ok">&#10003; ACCESS GRANTED</span>';
+    if (ac) { beep(880, ac.currentTime, .2); beep(1320, ac.currentTime + .18, .4); }
+    
+    await sleep(900);
+    $('pass').classList.add('rip');
+    rip();
+    $('stub').classList.add('tear');
+    
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const h = document.createElement('i');
+            h.textContent = '\u2764';
+            h.style.cssText = `left:${20 + Math.random() * 60}vw; font-size:${16 + Math.random() * 26}px; color:#ff6b8f; animation-duration:${3 + Math.random() * 3}s`;
+            $('hearts').appendChild(h);
+        }, i * 80);
+    }
+    
+    await sleep(2200);
+    open(`<h2>&#9992; Boarding Complete</h2><p style="line-height:1.8;font-style:italic">${C.akhir}</p><p style="margin-top:14px;text-align:right">- ${C.aku}</p>`);
+};
+
+function rip() {
+    if (!ac) return;
+    const l = ac.sampleRate * .7, b = ac.createBuffer(1, l, ac.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < l; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / l) * (Math.random() > .6 ? 1 : .2);
+    const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+    f.type = 'highpass';
+    f.frequency.value = 1800;
+    g.gain.value = .5;
+    s.buffer = b;
+    s.connect(f);
+    f.connect(g);
+    g.connect(ac.destination);
+    s.start();
+}
