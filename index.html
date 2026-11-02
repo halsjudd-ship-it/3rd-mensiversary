@@ -9,6 +9,9 @@
 <body>
 <div id="hearts"></div>
 
+<!-- Tombol Kontrol Musik (Pojok Kanan Atas) -->
+<button id="music-toggle" onclick="toggleMusic()" title="Play/Pause Music">🎵</button>
+
 <!-- HALAMAN 1: PEMBUKA -->
 <section class="scr on" id="s0">
     <h1 id="t0"></h1>
@@ -110,13 +113,28 @@
     </div>
 </section>
 
-<!-- HALAMAN 5: BLOOMING FLOWERS -->
+<!-- HALAMAN 5: ENDING (LOVELY & AESTHETIC) -->
 <section class="scr" id="s3">
-    <div id="garden-container"></div>
-    <div class="garden-text">
-        <h1 style="color: #fff; text-shadow: 0 0 10px #ffb347;">For You, My Love</h1>
-        <p style="color: #ffd699; font-style: italic;">Seperti bunga yang mekar, cintaku padamu terus bertumbuh.</p>
-        <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Kembali ke Awal ↺</button>
+    <div class="aurora-bg"></div>
+    
+    <div class="ending-content">
+        <div class="ending-chibi">
+            <img src="media/chibi.jpg" alt="Us Forever">
+        </div>
+        
+        <h1 class="ending-title">Forever & Always</h1>
+        <p class="ending-text">
+            Terima kasih sudah menjadi bagian dari perjalananku.<br>
+            Ini bukan akhir, melainkan awal dari petualangan kita selanjutnya.
+        </p>
+        
+        <div class="ending-hearts">
+            <span>💖</span><span>✨</span><span>💖</span>
+        </div>
+        
+        <p class="ending-sign">— Judd Hals</p>
+        
+        <button class="btn restart-btn" onclick="location.reload()">Kembali ke Awal ↺</button>
     </div>
 </section>
 

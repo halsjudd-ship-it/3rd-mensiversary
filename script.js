@@ -114,14 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
             
             await sleep(2200);
             
-            // MODAL PENUTUP & TOMBOL TIKTOK
+            // TOMBOL TIKTOK
             open(`
                 <h2 style="text-align:center; color:#b8325a;">&#9992; Boarding Complete</h2>
                 <p style="line-height:1.8; font-style:italic; text-align:center;">${C.akhir}</p>
-                
                 <div style="text-align:center; margin-top:20px;">
                     <p style="font-size:14px; margin-bottom:10px;">Aku punya satu kejutan lagi di TikTok...</p>
-                    <a href="https://www.tiktok.com/@khalilyaze" target="_blank" class="tiktok-btn" onclick="startGarden()">
+                    <a href="https://www.tiktok.com/@khalilyaze" target="_blank" class="tiktok-btn" onclick="setTimeout(()=>{document.getElementById('mod').classList.remove('on');show(3);}, 500)">
                         Buka TikTok & Lihat Kejutan
                     </a>
                 </div>
@@ -131,37 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ====== FUNGSI BUNGA ======
-function startGarden() {
-    if($('mod')) $('mod').classList.remove('on');
-    show(3);
-    
-    const container = $('garden-container');
-    if(!container) return;
-    
-    const emojis = ['🌸', '🌺', '🌷', '🌻', '🌹', '🌼'];
-    
-    for(let i = 0; i < 40; i++) {
-        setTimeout(() => {
-            const flower = document.createElement('div');
-            flower.className = 'flower';
-            const leftPos = Math.random() * 100;
-            flower.style.left = leftPos + '%';
-            
-            // Acak ukuran sedikit agar natural
-            const scale = 0.6 + Math.random() * 0.6;
-            flower.style.transform = `scale(${scale})`;
-            
-            const petal = document.createElement('div');
-            petal.className = 'flower-petal';
-            petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            flower.appendChild(petal);
-            container.appendChild(flower);
-        }, i * 150); // Muncul bergantian
-    }
-}
-// ====== AUDIO FUNCTIONS ======
+// ====== AUDIO & PIANO "PERFECT" ======
 let ac, filt, ng, song = new Audio();
 
 function initAudio() {
@@ -200,6 +169,68 @@ function beep(f, t, d = .15) {
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// Melodi Piano "Perfect"
+let bgmOn = false, bgmPlaying = false;
+const perfectMelody = [
+    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
+    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
+    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 0.8], [0, 0.4],
+    [587.33, 0.4], [523.25, 0.4], [493.88, 0.4], [440.00, 1.2], [0, 0.8],
+    [659.25, 0.4], [659.25, 0.4], [587.33, 0.4], [493.88, 0.4],
+    [659.25, 0.4], [659.25, 0.4], [587.33, 0.4], [493.88, 0.4],
+    [659.25, 0.4], [587.33, 0.4], [493.88, 0.4], [523.25, 1.2], [0, 1.0]
+];
+
+function playPerfectPiano(index = 0) {
+    if (!bgmPlaying) return;
+    if (index >= perfectMelody.length) index = 0;
+
+    const [freq, duration] = perfectMelody[index];
+
+    if (freq > 0 && ac) {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'triangle'; 
+        osc.frequency.value = freq;
+
+        const now = ac.currentTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.05); 
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+
+        osc.start(now);
+        osc.stop(now + duration);
+    }
+
+    setTimeout(() => playPerfectPiano(index + 1), duration * 1000);
+}
+
+function startBgm() {
+    if (!ac) initAudio();
+    if (!bgmOn) {
+        bgmOn = true;
+        bgmPlaying = true;
+        setTimeout(() => playPerfectPiano(0), 1000);
+    }
+}
+
+function toggleMusic() {
+    const btn = $('music-toggle');
+    if (bgmPlaying) {
+        bgmPlaying = false;
+        btn.textContent = '🔇';
+        btn.classList.add('paused');
+    } else {
+        bgmPlaying = true;
+        btn.textContent = '🎵';
+        btn.classList.remove('paused');
+        playPerfectPiano(0); 
+    }
+}
 
 // ====== RADIO FUNCTIONS ======
 const seen = new Set();
@@ -317,47 +348,10 @@ if($('inf')) {
         .map(x => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('');
 }
 
-// ====== MODAL & MUSIC ======
 const open = h => {
     if($('mb')) $('mb').innerHTML = h;
     if($('mod')) $('mod').classList.add('on');
 };
-
-let bgm, bgmOn = false;
-function synth() {
-    if (bgmOn || !ac) return;
-    bgmOn = true;
-    const ch = [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]];
-    let i = 0;
-    const m = ac.createGain();
-    m.gain.value = .6;
-    m.connect(ac.destination);
-    const go = () => {
-        const t = ac.currentTime;
-        ch[i++ % 4].forEach(f => {
-            const o = ac.createOscillator(), g = ac.createGain();
-            o.type = 'sine';
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0, t);
-            g.gain.linearRampToValueAtTime(.07, t + 1.5);
-            g.gain.linearRampToValueAtTime(0, t + 4.4);
-            o.connect(g);
-            g.connect(m);
-            o.start(t);
-            o.stop(t + 4.5);
-        });
-    };
-    go();
-    setInterval(go, 4000);
-}
-
-function startBgm() {
-    bgm = new Audio(C.musik_pass);
-    bgm.loop = true;
-    bgm.volume = .5;
-    bgm.addEventListener('error', synth);
-    bgm.play().catch(synth);
-}
 
 function rip() {
     if (!ac) return;
